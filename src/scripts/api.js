@@ -83,3 +83,33 @@ export function addPost({ description, imageUrl, token }) {
     return response.json();
   });
 }
+
+export function addLike({ token, id }) {
+  return fetch(postsHost + "/" + id + "/like", {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+
+    return response.json();
+  });
+}
+
+export function removeLike({ token, id }) {
+  return fetch(postsHost + "/" + id + "/dislike", {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    }
+
+    return response.json();
+  });
+}

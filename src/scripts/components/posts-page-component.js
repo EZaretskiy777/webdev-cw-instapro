@@ -1,6 +1,7 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, getToken, page } from "../index.js";
+import { addLike, removeLike } from "../api.js";
 // import { formatDistance } from "date-fns";
 // import { ru } from "date-fns/locale";
 
@@ -23,8 +24,12 @@ export function renderPostsPageComponent({ appEl }) {
     <img class="post-image" src="${post.imageUrl}">
   </div>
   <div class="post-likes">
-    <button data-post-id="${post.id}" class="like-button">
-      <img src="../assets/images/like-active.svg">
+    <button data-post-id="${post.id}" data-post-liked="${
+      post.isLiked
+    }" class="like-button">
+      <img src="../assets/images/${
+        post.isLiked ? "like-active" : "like-not-active"
+      }.svg">
     </button>
     <p class="post-likes-text">
       Нравится: <strong>${post.likes.length}</strong>
@@ -61,5 +66,25 @@ export function renderPostsPageComponent({ appEl }) {
         userId: userEl.dataset.userId,
       });
     });
+  }
+
+  if (getToken()) {
+    for (let like of document.querySelectorAll(".like-button")) {
+      if (like.dataset.postLiked === "true") {
+        like.addEventListener("click", () => {
+          removeLike({ id: like.dataset.postId, token: getToken() }).then(
+            () => {
+              goToPage(page);
+            },
+          );
+        });
+      } else {
+        like.addEventListener("click", () => {
+          addLike({ id: like.dataset.postId, token: getToken() }).then(() => {
+            goToPage(page);
+          });
+        });
+      }
+    }
   }
 }

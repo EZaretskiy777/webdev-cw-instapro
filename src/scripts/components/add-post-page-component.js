@@ -54,7 +54,11 @@ export function renderAddPostPageComponent({ appEl, аonAddPostClick }) {
       }
 
       onAddPostClick({
-        description: description.value,
+        description: description.value
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;"),
         imageUrl: imageUrl,
       });
     });
