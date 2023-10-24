@@ -2,7 +2,7 @@ import { loginUser, registerUser } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
 
-export function renderAddPostPageComponent({ appEl, аonAddPostClick }) {
+export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   let imageUrl = "";
   const render = () => {
     const appHtml = `

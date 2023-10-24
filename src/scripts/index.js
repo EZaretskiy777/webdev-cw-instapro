@@ -121,9 +121,9 @@ export const renderApp = () => {
     return renderAddPostPageComponent({
       appEl,
       onAddPostClick({ description, imageUrl }) {
-        addPost({ description, imageUrl, token: getToken() });
-        console.log("Добавляю пост...", { description, imageUrl });
-        goToPage(POSTS_PAGE);
+        addPost({ description, imageUrl, token: getToken() }).then(() => {
+          goToPage(POSTS_PAGE);
+        });
       },
     });
   }
