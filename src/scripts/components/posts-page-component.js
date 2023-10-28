@@ -2,8 +2,8 @@ import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken, page } from "../index.js";
 import { addLike, removeLike } from "../api.js";
-import { formatDistance } from "date-fns";
-import { ru } from "date-fns/locale";
+// import { formatDistance } from "date-fns";
+// import { ru } from "date-fns/locale";
 
 export function renderPostsPageComponent({ appEl }) {
   // TODO: реализовать рендер постов из api
@@ -24,9 +24,9 @@ export function renderPostsPageComponent({ appEl }) {
     <img class="post-image" src="${post.imageUrl}">
   </div>
   <div class="post-likes">
-    <button data-post-id="${post.id}" data-post-liked="${
-      post.isLiked
-    }" class="like-button">
+    <button data-post-id="${post.id}" data-user-id="${
+      post.user.id
+    }" data-post-liked="${post.isLiked}" class="like-button">
       <img src="../assets/images/${
         post.isLiked ? "like-active" : "like-not-active"
       }.svg">
@@ -40,7 +40,7 @@ export function renderPostsPageComponent({ appEl }) {
     ${post.description}
   </p>
   <p class="post-date">
-  ${formatDistance(new Date(), new Date(post.createdAt), { locale: ru })} назад
+  ${new Date(post.createdAt)} назад
   </p>
 </li>`,
     )
@@ -74,14 +74,18 @@ export function renderPostsPageComponent({ appEl }) {
         like.addEventListener("click", () => {
           removeLike({ id: like.dataset.postId, token: getToken() }).then(
             () => {
-              goToPage(page);
+              goToPage(page, {
+                userId: like.dataset.userId,
+              });
             },
           );
         });
       } else {
         like.addEventListener("click", () => {
           addLike({ id: like.dataset.postId, token: getToken() }).then(() => {
-            goToPage(page);
+            goToPage(page, {
+              userId: like.dataset.userId,
+            });
           });
         });
       }
